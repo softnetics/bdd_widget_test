@@ -43,8 +43,10 @@ void main() {
 
   test('existing step should not regenerate', () async {
     const scenario = 'existing_step';
-    final dummyStepPath =
-        p.join(getStepFolderName(scenario), 'the_app_is_running.dart');
+    final dummyStepPath = p.join(
+      getStepFolderName(scenario),
+      'the_app_is_running.dart',
+    );
     const expectedFileContent = '// existing step';
     fs.file(dummyStepPath)
       ..createSync(recursive: true)
@@ -66,8 +68,11 @@ relativeToTestFolder: false
       ..writeAsStringSync(bddOptions);
 
     const scenario = 'existing_step_outside_test_folder';
-    final dummyStepPath =
-        p.join(fs.currentDirectory.path, 'my_steps', 'the_app_is_running.dart');
+    final dummyStepPath = p.join(
+      fs.currentDirectory.path,
+      'my_steps',
+      'the_app_is_running.dart',
+    );
     fs.file(dummyStepPath)
       ..createSync(recursive: true)
       ..writeAsStringSync('dummy');
@@ -139,7 +144,7 @@ hookFolderName: hooksFolder
         '      try {\n'
         "        await beforeEach('''Testing scenario''');\n"
         '        await theAppIsRunning(tester);\n'
-        '      } on TestFailure {\n'
+        '      } catch (_) {\n'
         '        success = false;\n'
         '        rethrow;\n'
         '      } finally {\n'
@@ -164,10 +169,7 @@ hookFolderName: hooksFolder
       ..writeAsStringSync(bddOptions);
 
     const scenario = 'options';
-    expect(
-      () => generate(scenario),
-      throwsException,
-    );
+    expect(() => generate(scenario), throwsException);
   });
 
   test('merge options', () async {
@@ -260,9 +262,7 @@ stepFolderName: ./scenarios
     const scenario = 'options';
     final content = await generate(
       scenario,
-      const BuilderOptions(<String, dynamic>{
-        'include': externalYaml3,
-      }),
+      const BuilderOptions(<String, dynamic>{'include': externalYaml3}),
     );
     expect(content, expected);
   });
